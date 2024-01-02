@@ -31,7 +31,9 @@ function App() {
       Header: 'University',
       accessor: 'university'
     },
-  ]);
+  ],
+    []
+  );
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
 
@@ -40,16 +42,27 @@ function App() {
       <div className='container'>
         <table {...getTableProps()}>
           <thead>
-            {headerGroups.map(headerGroup => (
-              <tr {...headerGroup.getHeaderGroupProps}>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  
+                  <th {...column.getFooterProps()}>
+                    {column.render("Header")}
+                  </th>
                 ))}
               </tr>
             ))}
           </thead>
-          <tbody>
-
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => (
+                    <td {...cell.getCellProps()}> {cell.render("Cell")} </td>
+                  ))}
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>
